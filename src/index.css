@@ -26,7 +26,7 @@
   --success-subtle: rgba(61, 214, 140, 0.14);
   --warning: #F5A623;
   
-  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
@@ -124,20 +124,37 @@ body {
 /* Typography Utilities */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.15;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.035em;
   color: var(--text-primary);
+}
+
+h1 {
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+
+h2 {
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+}
+
+h3 {
+  letter-spacing: -0.025em;
+  line-height: 1.25;
 }
 
 p {
   color: var(--text-secondary);
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 1.025rem;
+  line-height: 1.72;
+  letter-spacing: -0.011em;
 }
 
 code, kbd, samp, pre, .font-mono {
   font-family: var(--font-mono);
+  letter-spacing: -0.015em;
 }
 
 a {

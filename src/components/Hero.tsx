@@ -107,10 +107,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
             {/* Main Headline */}
             <h1
               style={{
-                fontSize: 'clamp(2.4rem, 4.5vw, 3.75rem)',
+                fontSize: 'clamp(2.65rem, 5.2vw, 4.25rem)',
                 fontWeight: 700,
-                lineHeight: 1.12,
-                letterSpacing: '-0.035em',
+                lineHeight: 1.08,
+                letterSpacing: '-0.04em',
                 marginBottom: '1.5rem',
                 color: 'var(--text-primary)',
               }}
@@ -121,9 +121,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
             {/* Supporting Paragraph */}
             <p
               style={{
-                fontSize: 'clamp(1rem, 1.2vw, 1.15rem)',
+                fontSize: 'clamp(1.05rem, 1.25vw, 1.2rem)',
                 color: 'var(--text-secondary)',
-                lineHeight: 1.7,
+                lineHeight: 1.75,
+                letterSpacing: '-0.01em',
                 marginBottom: '2rem',
               }}
             >
@@ -331,10 +332,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                         x={node.x - 45}
                         y={node.y - 14}
                         fill="var(--text-muted)"
-                        fontSize="9"
+                        fontSize="9.5"
                         fontFamily="var(--font-mono)"
                         fontWeight="600"
-                        letterSpacing="0.05em"
+                        letterSpacing="0.08em"
                         pointerEvents="none"
                       >
                         {node.id.toUpperCase()}
@@ -345,9 +346,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                         x={node.x - 45}
                         y={node.y + 6}
                         fill="var(--text-primary)"
-                        fontSize="11.5"
+                        fontSize="12.5"
                         fontFamily="var(--font-display)"
-                        fontWeight="600"
+                        fontWeight="700"
+                        letterSpacing="-0.02em"
                         pointerEvents="none"
                       >
                         {node.label}
@@ -358,8 +360,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                         x={node.x - 45}
                         y={node.y + 22}
                         fill="var(--text-secondary)"
-                        fontSize="8.5"
+                        fontSize="9"
                         fontFamily="var(--font-mono)"
+                        letterSpacing="-0.01em"
                         pointerEvents="none"
                       >
                         {node.tech.split('·')[0]}
