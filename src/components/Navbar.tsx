@@ -20,7 +20,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme, onOpenResu
       setScrolled(window.scrollY > 30);
 
       // Section tracking
-      const sections = ['hero', 'about', 'projects', 'skills', 'experience', 'education', 'philosophy', 'contact'];
+      const sections = ['hero', 'about', 'projects', 'skills', 'experience', 'education', 'contact'];
       const scrollPos = window.scrollY + 200;
 
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -62,7 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme, onOpenResu
     { label: 'Skills', href: '#skills', id: 'skills' },
     { label: 'Experience', href: '#experience', id: 'experience' },
     { label: 'Education', href: '#education', id: 'education' },
-    { label: 'Philosophy', href: '#philosophy', id: 'philosophy' },
+    // { label: 'Philosophy', href: '#philosophy', id: 'philosophy' },
     { label: 'Contact', href: '#contact', id: 'contact' },
   ];
 

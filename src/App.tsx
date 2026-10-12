@@ -8,7 +8,7 @@ import { Skills } from './components/Skills';
 import { Experience } from './components/Experience';
 import { Education } from './components/Education';
 import { Certifications } from './components/Certifications';
-import { Philosophy } from './components/Philosophy';
+// import { Philosophy } from './components/Philosophy';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { ResumeModal } from './components/ResumeModal';
@@ -50,7 +50,7 @@ export function App() {
         <Experience />
         <Education />
         <Certifications />
-        <Philosophy />
+        {/* <Philosophy /> */}
         <Contact />
       </main>
 
