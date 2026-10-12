@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { profile } from '../data/profile';
 import { ArrowDown, FileText, ArrowUpRight } from 'lucide-react';
 
@@ -7,7 +7,13 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
-  const [activeNode, setActiveNode] = useState<string | null>(null);
+  const [tooltip, setTooltip] = useState<{
+    nodeId: string;
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const nodes = [
     {
@@ -56,6 +62,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
       color: '#6685FF',
     }
   ];
+
+  const activeNodeData = tooltip ? nodes.find((n) => n.id === tooltip.nodeId) : null;
 
   return (
     <section
@@ -195,6 +203,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
 
           {/* Hero Right Visual: Interactive Connected Systems Diagram */}
           <div
+            ref={containerRef}
             className="card-classic hero-visual-card"
             style={{
               padding: '1.75rem',
@@ -276,13 +285,32 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
 
                 {/* System Nodes */}
                 {nodes.map((node) => {
-                  const isHovered = activeNode === node.id;
+                  const isHovered = tooltip?.nodeId === node.id;
                   return (
                     <g
                       key={node.id}
-                      onMouseEnter={() => setActiveNode(node.id)}
-                      onMouseLeave={() => setActiveNode(null)}
-                      style={{ cursor: 'pointer', transition: 'all 0.2s ease' }}
+                      onMouseEnter={(e) => {
+                        const containerRect = containerRef.current?.getBoundingClientRect();
+                        if (containerRect) {
+                          setTooltip({
+                            nodeId: node.id,
+                            x: e.clientX - containerRect.left,
+                            y: e.clientY - containerRect.top,
+                          });
+                        }
+                      }}
+                      onMouseMove={(e) => {
+                        const containerRect = containerRef.current?.getBoundingClientRect();
+                        if (containerRect) {
+                          setTooltip({
+                            nodeId: node.id,
+                            x: e.clientX - containerRect.left,
+                            y: e.clientY - containerRect.top,
+                          });
+                        }
+                      }}
+                      onMouseLeave={() => setTooltip(null)}
+                      style={{ cursor: 'pointer' }}
                     >
                       {/* Node Box */}
                       <rect
@@ -293,8 +321,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                         rx="8"
                         fill={isHovered ? 'var(--bg-elevated)' : 'var(--bg-card)'}
                         stroke={isHovered ? 'var(--accent)' : 'var(--border-strong)'}
-                        strokeWidth={isHovered ? '2' : '1.5'}
+                        strokeWidth="1.5"
                         filter={isHovered ? 'url(#subtleGlow)' : undefined}
+                        style={{ transition: 'fill 0.15s ease, stroke 0.15s ease' }}
                       />
 
                       {/* Header small tag */}
@@ -306,6 +335,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                         fontFamily="var(--font-mono)"
                         fontWeight="600"
                         letterSpacing="0.05em"
+                        pointerEvents="none"
                       >
                         {node.id.toUpperCase()}
                       </text>
@@ -318,6 +348,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                         fontSize="11.5"
                         fontFamily="var(--font-display)"
                         fontWeight="600"
+                        pointerEvents="none"
                       >
                         {node.label}
                       </text>
@@ -329,47 +360,81 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                         fill="var(--text-secondary)"
                         fontSize="8.5"
                         fontFamily="var(--font-mono)"
+                        pointerEvents="none"
                       >
                         {node.tech.split('·')[0]}
                       </text>
 
                       {/* Status indicator dot */}
-                      <circle cx={node.x + 65} cy={node.y - 20} r="3" fill={node.color} />
+                      <circle cx={node.x + 65} cy={node.y - 20} r="3" fill={node.color} pointerEvents="none" />
                     </g>
                   );
                 })}
               </svg>
             </div>
 
-            {/* Interactive Detail Box on Hover / Default */}
+            {/* Floating Tooltip Popup below Cursor (Zero Flickering) */}
+            {tooltip && activeNodeData && (
+              <div
+                style={{
+                  position: 'absolute',
+                  left: `${Math.min(Math.max(tooltip.x, 150), (containerRef.current?.offsetWidth || 500) - 150)}px`,
+                  top: `${tooltip.y + 18}px`,
+                  transform: 'translateX(-50%)',
+                  pointerEvents: 'none', // Crucial: cursor never collides with tooltip, preventing flicker
+                  zIndex: 40,
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--accent)',
+                  borderRadius: 'var(--radius-sm)',
+                  padding: '0.75rem 1rem',
+                  width: '270px',
+                  boxShadow: '0 8px 28px rgba(0, 0, 0, 0.55)',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--accent)', fontWeight: 600 }}>
+                    {activeNodeData.id.toUpperCase()} LAYER
+                  </span>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: activeNodeData.color }} />
+                </div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.2rem' }}>
+                  {activeNodeData.label}
+                </div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-secondary)', marginBottom: '0.45rem' }}>
+                  {activeNodeData.tech}
+                </div>
+                <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.45, margin: 0 }}>
+                  {activeNodeData.desc}
+                </p>
+              </div>
+            )}
+
+            {/* Rock-solid Stable Bottom Info Bar (Fixed height prevents any layout shift) */}
             <div
               style={{
                 marginTop: '1.25rem',
-                padding: '0.85rem 1rem',
+                padding: '0 1rem',
                 backgroundColor: 'var(--bg-card)',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: 'var(--radius-sm)',
-                minHeight: '62px',
+                height: '46px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: '1rem',
+                boxSizing: 'border-box',
               }}
             >
-              <div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 600 }}>
-                  {activeNode
-                    ? `NODE: ${nodes.find(n => n.id === activeNode)?.label.toUpperCase()}`
-                    : 'INTERACTIVE ARCHITECTURE TOPOLOGY'}
-                </div>
-                <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginTop: '0.2rem', lineHeight: 1.4 }}>
-                  {activeNode
-                    ? nodes.find(n => n.id === activeNode)?.desc
-                    : 'Hover or tap nodes to inspect data flows across Adarsh’s full-stack enterprise layers.'}
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--accent)', fontWeight: 600 }}>
+                  SYSTEM EXPLORER
+                </span>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                  · Hover any node for architecture popup
+                </span>
               </div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
-                {activeNode ? nodes.find(n => n.id === activeNode)?.tech : 'REST · SQL · AWS'}
+                REST · SQL · AWS
               </div>
             </div>
           </div>
