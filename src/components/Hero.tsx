@@ -229,12 +229,12 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                 <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--success)' }} className="animate-pulse-subtle" />
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--text-primary)', fontWeight: 600 }}>
-                  FULL_STACK_SYSTEM_TOPOLOGY
+                  FULL STACK ENGINEER
                 </span>
               </div>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+              {/* <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)' }}>
                 LATENCY ~24ms · 99.98% OK
-              </span>
+              </span> */}
             </div>
 
             {/* SVG Interactive Architecture Map */}
